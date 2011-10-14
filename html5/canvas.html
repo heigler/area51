@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>canvas test</title>
+</head>
+
+<body>
+    <canvas id="myDrawing" width="200" height="200">
+        <p>Your browser doesnt support canvas.</p>
+    </canvas>
+
+<script type="text/javascript">
+    var drawingCanvas = document.getElementById('myDrawing');
+    if(drawingCanvas.getContext){
+        var context = drawingCanvas.getContext('2d');
+        
+        // yellow face
+        context.strokeStyle = "#000000";
+        context.fillStyle = "#ffff00";
+        context.beginPath();
+        context.arc(100,100,50,0,Math.PI*2, true);
+        context.closePath();
+        context.stroke();
+        context.fill();
+    }
+
+
+</script>
+
+</body>
+
+</html>
