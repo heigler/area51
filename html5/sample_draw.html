@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>draw sample</title>
+    </head>
+
+    <body>
+        <canvas id="canvas" width="960" height="480">
+        </canvas>
+
+        <script type="text/javascript" charset="utf-8">
+            var canvas = document.getElementById('canvas');
+            var paper = canvas.getContext('2d');
+
+            function draw(){
+                paper.clearRect(0, 0, 960, 480);
+                paper.translate(30, 30);
+                paper.rotate(0.1);
+
+                paper.beginPath();
+                paper.moveTo(10, 30);
+                paper.lineTo(30, 30);
+                paper.lineTo(0, 30);
+                paper.closePath();
+                paper.stroke();
+            }
+            
+            setInterval(draw, 400);
+        </script>
+
+    </body>
+</html>
+
