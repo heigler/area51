@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <title>Descubra o número</title>
+    <meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+        var defaultSeed = 30;
+        var answer;
+        var guesses = 0;
+        var hint = '';
+
+        function randomNumber(seed){
+            var seed = seed || 10;
+            return Math.round(Math.random() * seed);
+        }
+
+        function checkGuess(guess){
+            var hint = '';
+            var parsedGuess = parseInt(guess, 10);
+
+            guesses++;
+
+            if (parsedGuess == answer){
+                hint = 'Você acertou!';
+            }else if (parsedGuess < answer){
+                hint = 'É maior que isso...';
+            }else{
+                hint = 'É menor que isso...';
+            }
+
+            return hint;
+        }
+
+        $(document).ready(function(){
+            $('span.seedvalue').text(defaultSeed);
+            answer = randomNumber(defaultSeed);
+            
+            $('a#guess').click(function(evt){
+                evt.preventDefault();
+                var guess = $('input:first').val();
+                var guessHint = checkGuess(guess);
+
+                $('.hint').html(guessHint);
+                $('.guesscount').html(guesses);
+            });
+
+        });
+
+
+    </script>
+</head>
+
+<body>
+    <div class="hint">Escolha um número entre 0 e <span class="seedvalue"></span></div>
+    <div class="guesscount">0</div>
+    <form id="game_form" name="game_form">
+        <label for="guess">Tente</label>
+        <input type="text" name="guess" />
+        <a href="#" value="Tente!" id="guess" class="button">Tentar</a>
+    </form>
+</body>
+
+</html>
