@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>A simple canvas square</title>
+    <title>Teste 1</title>
 
     <style type="text/css" media="screen">
         #canvas{
@@ -13,7 +13,8 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="500" height="400"></canvas>
+    <h1>Joguinho do choquinho by Heigler ahuahauhau</h1>
+    <canvas id="canvas" width="500" height="600"></canvas>
 
     <script type="text/javascript" charset="utf-8">
         var canvas = document.getElementById('canvas');
@@ -21,9 +22,9 @@
 
         context.fillStyle = '#fa7b08';
         context.beginPath();
-        context.moveTo(250, 100);
-        context.lineTo(400, 230);
-        context.lineTo(100, 230);
+        context.moveTo(200, 100);
+        context.lineTo(450, 200);
+        context.lineTo(150, 400);
         context.closePath();
         context.fill();
 
@@ -31,10 +32,40 @@
         context.lineWidth = 10.0;
         context.stroke();
 
+        context.fillStyle = '#A80800';
         context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(400, 400);
-        context.closePath();
+        context.moveTo(300, 50);
+        var i = 200;
+        setInterval(function(){
+            if (i <= 500){         
+               i += 2;                
+            }else{
+                context.closePath();
+                context.fill();               
+                
+                var flag = 'on';
+                setInterval(function(){
+                    if (flag == 'on'){
+                        flag = 'off';
+                        context.strokeStyle = 'rgb(250, 123, 8)';
+                    }else{
+                        flag = 'on';
+                        context.strokeStyle = 'rgb(0, 6, 168)';
+                    }
+                    context.lineWidth = 10.0;
+                    context.stroke()
+                }, 1000);                
+
+                return false;
+                
+            }
+            context.lineTo(i, i);
+            console.log(i);
+            context.fill();
+
+        }, 50);
+
+
     </script>
 </body>
 </html>
