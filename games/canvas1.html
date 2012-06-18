@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>A simple canvas square</title>
+
+    <style type="text/css" media="screen">
+        #canvas{
+            border: 1px solid #c0c0c0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="500" height="400"></canvas>
+
+    <script type="text/javascript" charset="utf-8">
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+
+        context.fillStyle = '#fa7b08';
+        context.beginPath();
+        context.moveTo(250, 100);
+        context.lineTo(400, 230);
+        context.lineTo(100, 230);
+        context.closePath();
+        context.fill();
+
+        context.strokeStyle = 'rgb(168, 8, 0)';
+        context.lineWidth = 10.0;
+        context.stroke();
+
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.lineTo(400, 400);
+        context.closePath();
+    </script>
+</body>
+</html>
