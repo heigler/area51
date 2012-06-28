@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html, charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Exemplo 3.7 - Evento de teclado</title>
+
+    <style type="text/css" media="screen">
+        #canvas{
+            border: 1px solid #c0c0c0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="500" height="400"></canvas>
+
+    <script type="text/javascript" charset="utf-8">
+        var context;
+        var x = 100;
+        var y = 150;
+        var dx = 5;
+        var dy = 5;
+        const HEIGHT = 400;
+        const WIDTH = 500;
+
+        function init(canvasId){
+            context = document.getElementById('canvas').getContext('2d');
+            window.addEventListener('keydown', keyDown, true);
+            return setInterval(draw, 10);
+        }
+
+        function keyDown(event){
+            switch(event.keyCode){
+                case 87: // w
+                case 38: // up arrow
+                    if (y - dy > 0){
+                        y -= dy;
+                    }
+                    break;
+                case 83: // s
+                case 40: // down arrow
+                    if (y + dy + 50 < HEIGHT){
+                        y += dy;
+                    }
+                    break;
+                case 65: // a
+                case 37: // left arrow
+                    if (x - dx > 0){
+                        x -= dx;
+                    }
+                    break;
+                case 68: // d
+                case 39: // right arrow
+                    if (x + dx + 30 < WIDTH){
+                        x += dx;
+                    }
+                    break;
+            }
+        }
+
+        function clear(){
+            context.clearRect(0, 0, WIDTH, HEIGHT);
+        }
+
+        function rectangle(x, y, width, height){
+            context.beginPath();
+            context.rect(x, y, width, height);
+            context.closePath();
+            context.fill();
+            context.stroke();
+        }
+
+        function draw(){
+            clear();
+            context.fillStyle = 'black';
+            context.strokeStyle = 'blue';
+            rectangle(x, y, 30, 50);
+        }
+
+        init('canvas');
+
+
+    </script>
+</body>
+
+</html>
