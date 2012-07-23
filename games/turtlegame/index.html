@@ -54,6 +54,34 @@
                    };
         })();
 
+        function hit(a, b){
+            var hit = false;
+            // horizontal collisions
+            if(b.x + b.width >= a.x && b.x < a.x + a.width){
+                // vertical collisions
+                if(b.y + b.height >= a.y && b.y < a.y + a.height){
+                    hit = true;
+                }
+            }
+
+            // a in b
+            if(b.x <= a.x && b.x + b.width >= a.x + a.width){
+                if(b.y <= a.y && b.y + b.height >= a.y + a.height){
+                    hit = true;
+                }
+            }
+
+            // b in a
+            if(a.x <= b.x && a.x + a.width >= b.x + b.width){
+                if(a.y <= b.y && a.y + a.height >= b.y + b.height){
+                    hit = true;
+                }
+            }
+                
+            return hit;
+
+        }
+
         function addKeyboardEvents(){
             addEvent(document, 'keydown', function(e){
                 keyboard[e.keyCode] = true;
@@ -77,6 +105,8 @@
             updateLasers();
             updateInvaders();
 
+            checkHits();
+
             drawBackground();
             drawSpaceship();
             drawLasers();
@@ -91,6 +121,10 @@
         }
 
         function drawSpaceship(){
+            if(spaceship.state === 'dead'){
+                return;
+            }
+
             context.fillStyle = 'white';
             context.fillRect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
         }
@@ -106,7 +140,16 @@
         function drawInvaders(){
             for (var iter in invaders){
                 var invader = invaders[iter];
-                context.fillStyle = 'red';
+
+                if(invader.state == 'alive'){
+                    context.fillStyle = 'red';
+                }
+                if(invader.state == 'hit'){
+                    context.fillStyle = 'purple';
+                }
+                if(invader.state == 'dead'){
+                    context.fillStyle = 'black';
+                }
                 context.fillRect(invader.x, invader.y, invader.width, invader.height);
             }
         }
@@ -197,6 +240,20 @@
             });
         }
 
+        function checkHits(){
+            for(var iter in lasers){
+                var laser = lasers[iter];
+                for(var inv in invaders){
+                    var invader = invaders[inv];
+                    if(hit(laser, invader)){
+                        laser.state = 'hit';
+                        invader.state = 'hit';
+                        invader.counter = 0;                        
+                    }
+                }
+            }
+
+        }
 
         addKeyboardEvents();
 
