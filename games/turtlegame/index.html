@@ -1,0 +1,210 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Invasão das Tartarugas Aliens</title>
+  <meta name="description" content="Jogo da Invasão das Tartarugas Aliens">
+
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+  <header>
+
+  </header>
+  <div role="main">
+    <canvas id="game" width="600" height="400" />
+  </div>
+  <footer>
+
+  </footer>
+
+    <script>
+        var canvas = document.getElementById('game');
+        var context = canvas.getContext('2d');
+        var game = {
+            state: 'start'
+        }
+        var spaceship = {
+            x: 100,
+            y: 300,
+            width: 50,
+            height: 50,
+            counter: 0
+        }
+        var lasers = [];
+        var invaders = [];
+        var keyboard = {};
+
+        // tools
+        window.requestAnimFrame = (function(){
+            return window.requestAnimationFrame || 
+                   window.webkitRequestAnimationFrame || 
+                   window.mozRequestAnimationFrame || 
+                   window.oRequestAnimationFrame || 
+                   window.msRequestAnimationFrame || 
+                   function(callback){
+                        window.setTimeout(callback, 1000 / 60);
+                   };
+        })();
+
+        function addKeyboardEvents(){
+            addEvent(document, 'keydown', function(e){
+                keyboard[e.keyCode] = true;
+            });
+            addEvent(document, 'keyup', function(e){
+                keyboard[e.keyCode] = false;
+            });
+        }
+
+        function addEvent(node, name, func){
+            if(node.addEventListener){
+                node.addEventListener(name, func, false);
+            }else{
+                // ie
+                node.attachEvent(name, func);
+            }
+        }
+
+        function gameLoop(){
+            updateSpaceship();
+            updateLasers();
+            updateInvaders();
+
+            drawBackground();
+            drawSpaceship();
+            drawLasers();
+            drawInvaders();
+        }
+
+
+        // draws
+        function drawBackground(){
+            context.fillStyle = '#000000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawSpaceship(){
+            context.fillStyle = 'white';
+            context.fillRect(spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+        }
+
+        function drawLasers(){
+            context.fillStyle = 'white';
+            for(var iter in lasers){
+                var laser = lasers[iter];
+                context.fillRect(laser.x, laser.y, laser.width, laser.height);
+            }
+        }
+
+        function drawInvaders(){
+            for (var iter in invaders){
+                var invader = invaders[iter];
+                context.fillStyle = 'red';
+                context.fillRect(invader.x, invader.y, invader.width, invader.height);
+            }
+        }
+
+        // draws update
+        function updateLasers(){
+            // move the laser
+            for(var iter in lasers){
+                var laser = lasers[iter];
+                laser.y -= 2;
+                laser.counter++;
+            }
+
+            // remove lasers that are off the screen
+            lasers = lasers.filter(function(laser){
+                return laser.y > 0;
+            });
+        }
+
+        function updateSpaceship(){
+            // move left
+            if(keyboard[37]){
+                spaceship.x -= 10;
+                if(spaceship.x < 0){
+                    spaceship.x = 0;
+                }
+            }
+
+            // move right
+            if(keyboard[39]){
+                spaceship.x += 10;
+                var right = canvas.width - spaceship.width;
+                if(spaceship.x > right){
+                    spaceship.x = right;
+                }
+            }
+
+            // spacebar
+            if(keyboard[32]){
+                // only fire one laser
+                if(!keyboard.fired){
+                    fireLaser();
+                    keyboard.fired = true;
+                }else{
+                    keyboard.fired = false;
+                }
+            }
+
+        }
+
+        function updateInvaders(){
+            // populate invaders array
+            if(game.state === 'start'){
+                for(var iter = 0; iter < 10; iter++){
+                    invaders.push({
+                        x: 10 + iter * 50,
+                        y: 10,
+                        height: 40,
+                        width: 40,
+                        phase: Math.floor(Math.random() * 50),
+                        counter: 0,
+                        state: 'alive'
+                    });
+                }
+                game.state = 'playing';
+            }
+
+            for(var iter in invaders){
+                var invader = invaders[iter];
+                if(!invader){
+                    continue;
+                }
+
+                if(invader && invader.state == 'alive'){
+                    invader.counter++;
+                    invader.x += Math.sin(invader.counter * Math.PI * 2 / 100) * 3;
+                }
+            }
+        }
+
+        // extra
+        function fireLaser(){
+            lasers.push({
+                x: spaceship.x + 20, //offset
+                y: spaceship.y - 10,
+                width: 10,
+                height: 30
+            });
+        }
+
+
+        addKeyboardEvents();
+
+        (function animLoop(){
+            requestAnimFrame(animLoop);
+            gameLoop();
+        })();
+    </script>
+
+</body>
+</html>
