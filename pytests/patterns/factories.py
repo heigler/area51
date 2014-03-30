@@ -10,6 +10,8 @@ WARNING: This is not a functional module, some components are not full
 implemented, is just to show the pattern
 """
 
+__all__ = ['DiagramFactory', 'SvgDiagramFactory', 'create_diagram']
+
 
 # components
 
