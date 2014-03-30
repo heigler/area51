@@ -3,6 +3,10 @@
 """
 Factory Pattern demonstration (classical way, not so pythonic)
 
+Problems of this implementation:
+    Code are duplicated, both factories have almost identical code
+    Boring components, each component have its equivalent SvgSomething
+
 You can use it when need to create complex objects that are composed of
 others objects, each with its specific "family".
 
